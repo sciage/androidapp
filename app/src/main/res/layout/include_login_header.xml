@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/logo"
+        android:paddingTop="32dp"
+        android:id="@+id/layout_login_header"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voice Me"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:paddingTop="15dp"
+        android:paddingLeft="20dp"
+        android:layout_below="@+id/layout_login_header"
+        android:layout_centerHorizontal="true" />
+
+
+
+
+</RelativeLayout>

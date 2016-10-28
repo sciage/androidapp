@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="130dp"
+        android:layout_below="@+id/imageView"
+        android:layout_marginTop="58dp"
+        android:weightSum="1"
+        android:id="@+id/radioGroup"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_alignEnd="@+id/textView3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
+            android:text="Choose your gender"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:id="@+id/dialog_gender_male"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            android:id="@+id/dialog_gender_female"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textSize="20sp" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transgender"
+            android:id="@+id/dialog_gender_transgender"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textSize="20sp" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't show"
+            android:id="@+id/dialog_gender_dont_show"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textSize="20sp" />
+
+
+    </RadioGroup>
+
+
+</LinearLayout>

@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">Voiceme</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="posts_text">There are many variations of passages of Lorem Ipsum available,
+        but the majority have suffered alteration in some form</string>
+    <string name="selected_menu_item">Menu item: %1$s</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_text_status">TextStatus</string>
+    <string name="title_activity_audio_status">AudioStatus</string>
+
+    <string name="FACEBOOK_APP_ID">508355539363001</string>
+    <string name="GOOGLE_SERVER_CLIENT_ID">390792711591-gi948va2jhk3fr3bqlkmuaj373sa0n0c.apps.googleusercontent.com</string>
+
+    <string name="title_activity_feeling_details">FeelingDetailsActivity</string>
+    <string name="title_activity_user_hug_counter">UserHugCounterActivity</string>
+    <string name="title_activity_user_same_counter">UserSameCounterActivity</string>
+    <string name="title_activity_user_listen_counter">UserListenCounterActivity</string>
+    <string name="title_activity_user_feeling">UserFeelingActivity</string>
+    <string name="title_activity_license">LicenseActivity</string>
+
+    <!-- License checking status messages -->
+    <string name="check_license">Check license</string>
+    <string name="checking_license">Checking license...</string>
+    <string name="dont_allow">Don\'t allow the user access</string>
+    <string name="allow">Allow the user access</string>
+    <string name="application_error">Application error: %1$s</string>
+
+    <!-- Unlicensed dialog messages -->
+    <string name="unlicensed_dialog_title">Application not licensed</string>
+    <string name="unlicensed_dialog_body">This application is not licensed. Please purchase it from Android Market.</string>
+    <string name="unlicensed_dialog_retry_body">Unable to validate license. Check to see if a network connection is available.</string>
+    <string name="buy_button">Buy app</string>
+    <string name="retry_button">Retry</string>
+    <string name="quit_button">Exit</string>
+
+</resources>

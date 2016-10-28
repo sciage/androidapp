@@ -1,0 +1,86 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+
+// Uncomment if you want to use Java 8 syntax without switching to the Jack+Jill compilers
+// apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    signingConfigs {
+        config {
+            storeFile file('C:/Users/harish/Desktop/VoicemeKeyStore.jks')
+            keyAlias 'VoicemeAlias'
+            keyPassword 'hemlata1'
+            storePassword 'shambhavi12345'
+        }
+    }
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
+    defaultConfig {
+        applicationId "in.voiceme.app.voiceme"
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        buildConfigField "String", "BASE_URL", "\"http://54.164.58.140/\""
+    }
+    // If you want to use Java 8 syntax, you will need to first enable Retrolambda, then
+    //  change these values.
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //compile project(':licenseLib')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:cardview-v7:24.2.1'
+    compile 'com.soundcloud.android:android-crop:0.9.10@aar'
+    compile 'com.squareup:otto:1.3.8'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'io.reactivex:rxjava:1.1.8'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.github.jd-alexander:LikeButton:0.2.0'
+    compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    compile 'com.jakewharton.timber:timber:4.3.1'
+    compile 'com.amazonaws:aws-android-sdk-cognito:2.3.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.16.0'
+    compile 'com.google.android.gms:play-services-auth:9.6.1'
+    compile 'com.google.android.gms:play-services-plus:9.6.1'
+    compile 'com.google.firebase:firebase-core:9.6.1'
+    compile 'com.google.firebase:firebase-messaging:9.6.1'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
+}
+// ADD THIS AT THE BOTTOM
+apply plugin: 'com.google.gms.google-services'

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ProfilePage.ProfileActivity">
+
+
+    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/drawer_layout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/include_toolbar" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_header_banner">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:background="@color/colorPrimary"
+                    android:id="@+id/profile_pic_above_view"
+                    android:clickable="false"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/followingIcon"
+                    android:padding="10dp"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_below="@+id/profile_pic_above_view"
+                    android:paddingRight="20dp"
+                    android:layout_alignParentRight="true"/>
+
+                <ImageView
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_marginTop="30dp"
+                    android:id="@+id/activity_profile_avatar"
+                    android:background="#fff"
+                    android:layout_below="@+id/toolbar"
+                    android:layout_centerHorizontal="true"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="User Name"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_below="@+id/activity_profile_avatar"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:padding="15dp"
+                    android:textSize="16sp"
+                    android:id="@+id/profile_avatar_user_name"/>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#aa000000"
+                    android:layout_alignTop="@id/activity_profile_avatar"
+                    android:layout_alignBottom="@id/activity_profile_avatar"
+                    android:layout_alignStart="@id/activity_profile_avatar"
+                    android:layout_alignLeft="@id/activity_profile_avatar"
+                    android:layout_alignEnd="@id/activity_profile_avatar"
+                    android:layout_alignRight="@id/activity_profile_avatar"
+                    android:id="@+id/activity_profile_avatarProgressFrame"
+                    android:clickable="true">
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminateOnly="true"/>
+                </FrameLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_avatar_user_name"
+                    android:padding="10dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/activity_profile_textFields">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:singleLine="true"
+                            android:text="Total Posts"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="0"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:layout_gravity="center"
+                            android:text="Followers"/>
+                        <TextView
+                            android:id="@+id/action_follwers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="0"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:layout_gravity="center"
+                            android:text="Following"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="0"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/profile_user_name_section"
+                android:padding="15dp"
+                android:background="#dadfdf"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="User information"
+                    android:paddingBottom="10dp"
+                    android:textSize="18sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="#fff"
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:text="Gender"/>
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="#fff"
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:singleLine="true"
+                        android:gravity="center"
+                        android:id="@+id/profile_page_gender"
+                        android:text="Male"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="#fff"
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:text="Location"/>
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="#fff"
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:id="@+id/profile_page_location"
+                        android:text="Delhi, India"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Language"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:textSize="18sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:singleLine="true"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="#fff"
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:id="@+id/profile_page_language"
+                        android:text="English"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/include_main_nav_drawer" />
+
+    </android.support.v4.widget.DrawerLayout>
+
+</android.support.design.widget.CoordinatorLayout>
