@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/androidapp.iml" filepath="$PROJECT_DIR$/androidapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/licenseLib/licenseLib.iml" filepath="$PROJECT_DIR$/licenseLib/licenseLib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/voiceme.iml" filepath="$PROJECT_DIR$/voiceme.iml" />
     </modules>
   </component>
 </project>

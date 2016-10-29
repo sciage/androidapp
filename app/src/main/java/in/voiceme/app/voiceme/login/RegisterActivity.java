@@ -36,6 +36,8 @@ import in.voiceme.app.voiceme.SocialSignInHelper.GoogleSignInHelper;
 import in.voiceme.app.voiceme.infrastructure.BaseActivity;
 import in.voiceme.app.voiceme.infrastructure.PrefUtil;
 
+import static com.facebook.AccessToken.getCurrentAccessToken;
+
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener, GoogleResponseListener, FacebookResponse, GoogleAuthResponse {
     private PrefUtil prefUtil;
@@ -261,6 +263,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     }
 
+
     // -- Google Sign-In Related Methods
     /*
     private void initGoogleLogin() {
@@ -362,6 +365,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         Log.d("Person email: ", facebookUser.email + "");
         Log.d("Person image: ", facebookUser.facebookID + "");
 
+        addFacebookLoginToCognito(getCurrentAccessToken());
         application.getAuth().setAuthToken("token");
         application.getAuth().getUser().setLoggedIn(true);
         finishLogin();

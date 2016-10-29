@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import in.voiceme.app.voiceme.login.RegisterActivity;
+
 /**
  * Created by multidots on 6/16/2016.
  * This class will initialize facebook login and handle other sdk functions.
@@ -30,6 +32,7 @@ public class FacebookHelper {
     private FacebookResponse mListener;
     private String mFieldString;
     private CallbackManager mCallBackManager;
+    private RegisterActivity registerActivity;
 
     /**
      * Public constructor.
