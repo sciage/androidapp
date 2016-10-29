@@ -9,19 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
-import com.amazonaws.mobileconnectors.cognito.Dataset;
-import com.amazonaws.mobileconnectors.cognito.DefaultSyncCallback;
-import com.amazonaws.regions.Regions;
-import com.facebook.AccessToken;
-import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 import in.voiceme.app.voiceme.ActivityPage.MainActivity;
 import in.voiceme.app.voiceme.R;
@@ -43,11 +32,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private PrefUtil prefUtil;
 
     private static final int RC_SIGN_IN = 9001;
-    private static final String IDENTITY_POOL_ID = "us-east-1:b9755bcf-4179-40ad-8a5e-07d7baa8914c";
-    private static final Regions REGION = Regions.US_EAST_1;
-    private static String TAG = MainActivity.class.getSimpleName();
-    private CognitoCachingCredentialsProvider mCredentialsProvider;
-    private CognitoSyncManager mSyncClient;
+
+
 
     private FacebookHelper mFbHelper;
     private GooglePlusSignInHelper mGHelper;
@@ -79,8 +65,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         findViewById(R.id.g_plus_login_btn).setOnClickListener(this);
         findViewById(R.id.bt_act_login_fb).setOnClickListener(this);
 
-        initCognitoCredentialsProvider();
-        initCognitoSyncClient();
+
         // initFacebookLogin();
      //   initGoogleLogin();
 
@@ -127,7 +112,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void finishLogin() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, LoginUserDetails.class));
         finish();
     }
     /*
@@ -144,51 +129,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     // -- AWS Cognito Related Methods
 
-    private void initCognitoCredentialsProvider() {
-        mCredentialsProvider = new CognitoCachingCredentialsProvider(
-                getApplicationContext(),
-                IDENTITY_POOL_ID, // YOUR Identity Pool ID from AWS Cognito
-                REGION // Region
-        );
-
-        Log.i(TAG, "mCredentialsProvider: " + mCredentialsProvider.toString());
-    }
-
-    private void initCognitoSyncClient() {
-        mSyncClient = new CognitoSyncManager(
-                getApplicationContext(),
-                REGION,
-                mCredentialsProvider
-        );
-
-        Log.i(TAG, "mSyncClient: " + mSyncClient.toString());
-    }
-
-    // save them inside shared preference
-    private void outputCognitoCredentials() {
-        Log.i(TAG, "outputCognitoCredentials");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, "getCachedIdentityId: " + mCredentialsProvider.getCachedIdentityId());
-                Log.i(TAG, "getIdentityId: " + mCredentialsProvider.getIdentityId());
-            }
-        }).start();
-    }
 
 
-    private void addDataToSampleDataset(String key, String value) {
-        Dataset dataset = mSyncClient.openOrCreateDataset("SampleDataset");
-        dataset.put(key, value);
-        dataset.synchronize(new DefaultSyncCallback() {
-            @Override
-            public void onSuccess(Dataset dataset, List newRecords) {
-                Log.i(TAG, "addDataToSampleDataset onSuccess");
-                Log.i(TAG, dataset.toString());
 
-            }
-        });
-    }
+
+
 
     /**
      * <h2>refreshCredentialsProvider</h2>
@@ -198,14 +143,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 
 
-    private void refreshCredentialsProvider() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mCredentialsProvider.refresh();
-            }
-        }).start();
-    }
+
 
     /*
     // -- Facebook SDK Related Methods
@@ -246,22 +184,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     } */
 
 
-    private void addFacebookLoginToCognito(AccessToken facebookAccessToken) {
-        Log.i(TAG, "addFacebookLoginToCognito");
-        Log.i(TAG, "AccessToken: " + facebookAccessToken.getToken());
 
-        addDataToSampleDataset("facebook_token", facebookAccessToken.getToken()); // please don't do this in a production app...
-
-        Map<String, String> logins = mCredentialsProvider.getLogins();
-        logins.put("graph.facebook.com", facebookAccessToken.getToken());
-        Log.i(TAG, "logins: " + logins.toString());
-
-        mCredentialsProvider.setLogins(logins);
-
-       refreshCredentialsProvider();
-
-
-    }
 
 
     // -- Google Sign-In Related Methods
@@ -310,18 +233,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
     } */
 
-    private void addGoogleLoginToCognito(String token) throws GoogleAuthException, IOException {
-        Log.i(TAG, "addGoogleLoginToCognito");
-        Log.i(TAG, "token: " + token);
 
-        addDataToSampleDataset("google_token", token); // please don't do this in a production app...
-
-        Map<String, String> logins = mCredentialsProvider.getLogins();
-        logins.put("accounts.google.com", token);
-        Log.i(TAG, "logins: " + logins.toString());
-
-        mCredentialsProvider.setLogins(logins);
-    }
 
 
     @Override
@@ -359,13 +271,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onFbProfileReceived(FacebookUser facebookUser) {
         Toast.makeText(this, "Facebook user data: name= " + facebookUser.name + " email= " + facebookUser.email, Toast.LENGTH_SHORT).show();
-
+        addFacebookLoginToCognito(getCurrentAccessToken());
+        outputCognitoCredentials();
         Log.d("Person name: ", facebookUser.name + "");
         Log.d("Person gender: ", facebookUser.gender + "");
         Log.d("Person email: ", facebookUser.email + "");
         Log.d("Person image: ", facebookUser.facebookID + "");
 
-        addFacebookLoginToCognito(getCurrentAccessToken());
         application.getAuth().setAuthToken("token");
         application.getAuth().getUser().setLoggedIn(true);
         finishLogin();

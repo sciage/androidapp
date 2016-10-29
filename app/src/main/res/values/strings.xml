@@ -36,5 +36,6 @@
     <string name="buy_button">Buy app</string>
     <string name="retry_button">Retry</string>
     <string name="quit_button">Exit</string>
+    <string name="title_activity_login_user_details">LoginUserDetails</string>
 
 </resources>
