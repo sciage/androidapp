@@ -2,6 +2,7 @@ package in.voiceme.app.voiceme.services;
 
 import java.util.List;
 
+import in.voiceme.app.voiceme.login.LoginResponse;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -38,5 +39,17 @@ public interface WebService {
                                     @Query("hug") int hug,
                                     @Query("same") int same,
                                     @Query("listen") int listen);
+
+    @FormUrlEncoded
+    @POST("login.php")
+    Observable<LoginResponse> login(
+            @Field("name") String name,
+            @Field("email") String email,
+            @Field("location") String location,
+            @Field("dob") String dateOfBirth,
+            @Field("user_id") String userId,
+            @Field("profile") String profile,
+            @Field("gender") String gender
+    );
 
 }

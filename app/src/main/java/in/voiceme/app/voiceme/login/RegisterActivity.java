@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-import in.voiceme.app.voiceme.ActivityPage.MainActivity;
 import in.voiceme.app.voiceme.R;
 import in.voiceme.app.voiceme.SocialSignInHelper.FacebookHelper;
 import in.voiceme.app.voiceme.SocialSignInHelper.FacebookResponse;
@@ -307,5 +306,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onGoogleAuthSignInFailed() {
         Toast.makeText(this, "Google sign in failed.", Toast.LENGTH_SHORT).show();
     }
+
+
 
 }

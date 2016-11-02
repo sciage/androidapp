@@ -37,6 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private CognitoSyncManager mSyncClient;
     private static String TAG = MainActivity.class.getSimpleName();
 
+
     private static final String IDENTITY_POOL_ID = "us-east-1:b9755bcf-4179-40ad-8a5e-07d7baa8914c";
     private static final Regions REGION = Regions.US_EAST_1;
 
@@ -62,6 +63,7 @@ public abstract class BaseActivity extends AppCompatActivity {
          * Initializes the sync client. This must be call before you can use it.
 
          AmazonCognitoService.init(this); */
+
     }
 
     private void initCognitoCredentialsProvider() {
@@ -226,6 +228,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .start();
     }
 
+
+
     protected void setNavDrawer(NavDrawer drawer) {
         this.navDrawer = drawer;
         this.navDrawer.create();
@@ -248,5 +252,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public interface FadeOutListener {
         void onFadeOutEnd();
     }
+
+
 
 }

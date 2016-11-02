@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import in.voiceme.app.voiceme.R;
@@ -14,12 +17,28 @@ import in.voiceme.app.voiceme.infrastructure.MainNavDrawer;
 
 public class MainActivity extends BaseAuthenticatedActivity {
 
+
     @Override
     protected void onVoicemeCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle("Activity");
         setNavDrawer(new MainNavDrawer(this));
 
+        final FloatingActionButton textStatus = (FloatingActionButton) findViewById(R.id.action_a);
+        textStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Button 01", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        final FloatingActionButton audioStatus = (FloatingActionButton) findViewById(R.id.action_b);
+        audioStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "button 02", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         /**
          * Initialize Facebook SDK

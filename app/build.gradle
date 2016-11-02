@@ -81,6 +81,9 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
+
+    //FAB libraru
+    compile 'com.getbase:floatingactionbutton:1.10.1'
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'
