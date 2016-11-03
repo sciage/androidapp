@@ -84,6 +84,7 @@ dependencies {
 
     //FAB libraru
     compile 'com.getbase:floatingactionbutton:1.10.1'
+    compile 'com.github.IntruderShanky:FunkyHeader:1.2.1'
 }
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'
