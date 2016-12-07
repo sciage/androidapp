@@ -138,7 +138,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    private void addGoogleLoginToCognito(String token) throws GoogleAuthException, IOException {
+    public void addGoogleLoginToCognito(String token) throws GoogleAuthException, IOException {
         Log.i(TAG, "addGoogleLoginToCognito");
         Log.i(TAG, "token: " + token);
 

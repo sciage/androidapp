@@ -10,7 +10,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -113,9 +116,26 @@ public class GooglePlusSignInHelper implements GoogleApiClient.ConnectionCallbac
         if (requestCode == GooglePlusSignInHelper.SIGN_IN_REQUEST_CODE) {
             if (mGoogleApiClient != null && !mGoogleApiClient.isConnecting()) {
                 mGoogleApiClient.connect();
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                handleGoogleSignInResult(result);
             }
         }
     }
+
+    private void handleGoogleSignInResult(GoogleSignInResult result) {
+        Log.i("google Signin", "handleSignInResult: " + result.isSuccess());
+     /*   if (result.isSuccess()) {
+            try {
+                if (result.getSignInAccount() != null) {
+                    addGoogleLoginToCognito(result.getSignInAccount().getIdToken());
+                } else {
+                    Log.i("error", "result.getSignInAccount is null.");
+                }
+            } catch (GoogleAuthException | IOException e) {
+                e.printStackTrace();
+            }
+        } */
+     }
 
     public void signOut() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {

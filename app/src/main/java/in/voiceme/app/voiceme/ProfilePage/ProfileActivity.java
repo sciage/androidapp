@@ -1,31 +1,29 @@
 package in.voiceme.app.voiceme.ProfilePage;
 
-import android.app.Dialog;
-import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.soundcloud.android.crop.Crop;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import in.voiceme.app.voiceme.R;
 import in.voiceme.app.voiceme.VoicemeApplication;
 import in.voiceme.app.voiceme.infrastructure.BaseAuthenticatedActivity;
@@ -36,22 +34,27 @@ import rx.android.schedulers.AndroidSchedulers;
 
 public class ProfileActivity extends BaseAuthenticatedActivity implements View.OnClickListener {
     private static final int REQUEST_SELECT_IMAGE = 100;
+    private CircleImageView avatarView;
+    private View avatarProgressFrame;
+    private File tempOutputFile; //storing the image temporarily while we crop it.
+
+    // keep track of state of the activity
     private static final int STATE_VIEWING = 1;
     private static final int STATE_EDITING = 2;
+
+    // activity gets destroyed during rotation. we can save the state of the activity before its destroyed
     private static final String BUNDLE_STATE = "BUNDLE_STATE";
-    private static boolean isProgressBarVisible;
 
     private int currentState;
-    private EditText userName;
-    private EditText userLocation;
-    private EditText userLanguage;
-    private EditText gender;
-    private TextView followers;
+    // keep track of contextual action bar
     private ActionMode editProfileActionMode;
-    private ImageView avatarView;
-    private View avatarProgressFrame;
-    private File tempOutputFile;
-    private Dialog progressDialog;
+
+    private EditText username;
+    private EditText about;
+
+    private TextView age;
+    private TextView gender;
+    private TextView location;
 
     @Override
     protected void onVoicemeCreate(Bundle savedState) {
@@ -65,33 +68,32 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
         }
 
 
-        avatarView = (ImageView) findViewById(R.id.activity_profile_avatar);
+        avatarView = (CircleImageView) findViewById(R.id.image);
         avatarProgressFrame = findViewById(R.id.activity_profile_avatarProgressFrame);
-        userName = (EditText) findViewById(R.id.profile_avatar_user_name);
-        gender = (EditText) findViewById(R.id.profile_page_gender);
-        followers = (TextView) findViewById(R.id.action_follwers);
-        userLocation = (EditText) findViewById(R.id.profile_page_location);
-        userLanguage = (EditText) findViewById(R.id.profile_page_language);
         tempOutputFile = new File(getExternalCacheDir(), "temp-image.jpg");
 
+        username = (EditText) findViewById(R.id.name);
+        about = (EditText) findViewById(R.id.about);
+
+        age = (TextView) findViewById(R.id.age);
+        gender = (TextView) findViewById(R.id.gender);
+        location = (TextView) findViewById(R.id.location);
+
+        age.setOnClickListener(this);
+        gender.setOnClickListener(this);
+        location.setOnClickListener(this);
+
         avatarView.setOnClickListener(this);
+
         avatarProgressFrame.setVisibility(View.GONE);
 
-        User user = application.getAuth().getUser();
-        getSupportActionBar().setTitle(user.getUserNickName());
-        Picasso.with(this).load(user.getAvatarPics()).into(avatarView);
 
-        if (savedState == null) {
-            userName.setText(user.getUserNickName());
-            gender.setText(user.getGender());
-            userLocation.setText(user.getUserLocation());
-            userLanguage.setText(user.getUserLanguage());
-            changeState(STATE_VIEWING);
-        } else
-            changeState(savedState.getInt(BUNDLE_STATE));
 
-        if (isProgressBarVisible)
-            setProgressBarVisible(true);
+
+
+
+        //   if (isProgressBarVisible)
+        //     setProgressBarVisible(true);
 
     }
 
@@ -116,91 +118,68 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
     }
 
     private void changeAvatar() {
-        List<Intent> otherImageCaptureIntents = new ArrayList<>();
+        List<Intent> otherImageCaptureIntent = new ArrayList<>();
         List<ResolveInfo> otherImageCaptureActivities = getPackageManager()
-                .queryIntentActivities(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 0);
-
-        for (ResolveInfo info : otherImageCaptureActivities) {
+                .queryIntentActivities(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 0); // finding all intents in apps which can handle capture image
+        // loop through all these intents and for each of these activities we need to store an intent
+        for (ResolveInfo info: otherImageCaptureActivities){ // Resolve info represents an activity on the system that does our work
             Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            captureIntent.setClassName(info.activityInfo.packageName, info.activityInfo.name);
+            captureIntent.setClassName(info.activityInfo.packageName, info.activityInfo.name); // declaring explicitly the class where we will go
+            // where the picture activity dump the image
             captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempOutputFile));
-            otherImageCaptureIntents.add(captureIntent);
+            otherImageCaptureIntent.add(captureIntent);
         }
+
+        // above code is only for taking picture and letting it go through another app for cropping before setting to imageview
+        // now below is for choosing the image from device
 
         Intent selectImageIntent = new Intent(Intent.ACTION_PICK);
         selectImageIntent.setType("image/*");
 
-        Intent chooser = Intent.createChooser(selectImageIntent, "Chooser Avatar");
-        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, otherImageCaptureIntents.
-                toArray(new Parcelable[otherImageCaptureIntents.size()]));
+        Intent chooser = Intent.createChooser(selectImageIntent, "Choose Avatar");
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                otherImageCaptureIntent.toArray(new Parcelable[otherImageCaptureActivities.size()]));  // add 2nd para as intent of parcelables.
 
         startActivityForResult(chooser, REQUEST_SELECT_IMAGE);
-
     }
 
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) {
+        if (resultCode != RESULT_OK){
             tempOutputFile.delete();
             return;
         }
 
-        if (requestCode == REQUEST_SELECT_IMAGE) {
-            Uri outputFile;
-            Uri tempFileUri = Uri.fromFile(tempOutputFile);
+        if (resultCode == RESULT_OK ){
+            if ( requestCode == REQUEST_SELECT_IMAGE) {
+                // user selected an image off their device. other condition they took the image and that image is in our tempoutput file
+                Uri outputFile;
+                Uri tempFileUri = Uri.fromFile(tempOutputFile);
+                // if statement will detect if the user selected an image from the device or took an image
+                if (data != null && (data.getAction() == null || !data.getAction().equals(MediaStore.ACTION_IMAGE_CAPTURE))){
+                    //then it means user selected an image off the device
+                    // so we can get the Uri of that image using data.getData
+                    outputFile = data.getData();
+                    // Now we need to do the crop
+                } else {
+                    // image was out temp file. user took an image using camera
+                    outputFile = tempFileUri;
+                    // Now we need to do the crop
+                }
+                startCropActivity(outputFile);
 
-            if (data != null && (data.getAction() == null || !data.getAction().equals(MediaStore.ACTION_IMAGE_CAPTURE)))
-                outputFile = data.getData();
-            else
-                outputFile = tempFileUri;
+            } else if (requestCode == UCrop.REQUEST_CROP){
+                avatarView.setImageResource(0);
 
-            new Crop(outputFile)
-                    .asSquare()
-                    .output(tempFileUri)
-                    .start(this);
-        } else if (requestCode == Crop.REQUEST_CROP) {
-            // todo: Send tempFileUri to server as new avatar
-            avatarProgressFrame.setVisibility(View.VISIBLE);
-            bus.post(new Account.ChangeAvatarRequest(Uri.fromFile(tempOutputFile)));
+                avatarView.setImageURI(Uri.fromFile(tempOutputFile));
 
-            /* avatarView.setImageResource(0);
-            avatarView.setImageURI(Uri.fromFile(tempOutputFile)); */
+                // avatarProgressFrame.setVisibility(View.VISIBLE);
+                // bus.post(new Account.ChangeAvatarRequest(Uri.fromFile(tempOutputFile)));
+            }
+
         }
     }
 
-    @Subscribe
-    public void onAvatarUpdated(Account.ChangeAvatarResponse response) {
-        avatarProgressFrame.setVisibility(View.GONE);
-        if (!response.didSucceed()) {
-            response.showErrorToast(this);
-        }
-    }
 
-    @Subscribe
-    public void onProfileUpdated(Account.UpdateProfileResponse response) {
-        if (!response.didSucceed()) {
-            response.showErrorToast(this);
-            changeState(STATE_EDITING);
-        }
-
-        userName.setError(response.getPropertyError("displayName"));
-        gender.setError(response.getPropertyError("email"));
-        setProgressBarVisible(false);
-    }
-
-    private void setProgressBarVisible(boolean visible) {
-        if (visible) {
-            progressDialog = new ProgressDialog.Builder(this)
-                    .setTitle("Updating Profile")
-                    .setCancelable(false)
-                    .show();
-        } else if (progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-
-        isProgressBarVisible = visible;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -216,43 +195,44 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
             changeState(STATE_EDITING);
             return true;
         } else if (itemId == R.id.activity_profile_menuChangePassword) {
-            FragmentTransaction transaction = getFragmentManager()
-                    .beginTransaction()
-                    .addToBackStack(null);
-
-            ChangePasswordDialog dialog = new ChangePasswordDialog();
-            dialog.show(transaction, null);
+            //  startActivity(new Intent(this, AppConfigsActivity.class));
             return true;
         }
 
         return false;
     }
 
-    private void changeState(int state) {
-        if (state == currentState)
+    private void startCropActivity(@NonNull Uri uri) {
+
+        UCrop uCrop = UCrop.of(uri, Uri.fromFile(tempOutputFile));
+        uCrop.start(ProfileActivity.this);
+    }
+
+    private void changeState (int state){
+        // if we switching back to current state, then donot do anything
+        if (state == currentState){
             return;
+        }
 
         currentState = state;
 
-        if (state == STATE_VIEWING) {
-            userName.setEnabled(false);
+        if (state == STATE_VIEWING){
+            username.setEnabled(false);
+            about.setEnabled(false);
+            age.setEnabled(false);
+            location.setEnabled(false);
             gender.setEnabled(false);
-            userLocation.setEnabled(false);
-            userLanguage.setEnabled(false);
 
-            if (editProfileActionMode != null) {
-                editProfileActionMode.finish();
-                editProfileActionMode = null;
-            }
-        } else if (state == STATE_EDITING) {
-            userName.setEnabled(true);
+
+        } else if (state == STATE_EDITING){
+            username.setEnabled(true);
+            about.setEnabled(true);
+            age.setEnabled(true);
+            location.setEnabled(true);
             gender.setEnabled(true);
-            userLanguage.setEnabled(true);
-            userLocation.setEnabled(true);
 
-            editProfileActionMode = toolbar.startActionMode(new EditProfileActionCallback());
-        } else
-            throw new IllegalArgumentException("Invalid state: " + state);
+        } else throw new IllegalArgumentException("invalid state: " + state);
+
     }
 
     private void getData() throws Exception {
@@ -263,7 +243,7 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
                     @Override
                     public void onNext(List<PostsModel> response) {
                         Log.e("RESPONSE:::", "Size===" + response.size());
-                        followers.setText(String.valueOf(response.size()));
+                        //     followers.setText(String.valueOf(response.size()));
                     }
                 });
     }
@@ -287,14 +267,14 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
             int itemId = item.getItemId();
 
             if (itemId == R.id.activity_profile_edit_menuDone) {
-                setProgressBarVisible(true);
+                // setProgressBarVisible(true);
                 /*User user = application.getAuth().getUser();
                 user.setUserNickName(userName.getText().toString());
                 user.setGender(gender.getText().toString()); */
 
                 changeState(STATE_VIEWING);
                 bus.post(new Account.UpdateProfileRequest(
-                        userName.getText().toString(),
+                        username.getText().toString(),
                         gender.getText().toString()
                 ));
                 return true;

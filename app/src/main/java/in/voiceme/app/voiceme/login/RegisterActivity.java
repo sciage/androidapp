@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -20,7 +21,6 @@ import in.voiceme.app.voiceme.SocialSignInHelper.GoogleAuthResponse;
 import in.voiceme.app.voiceme.SocialSignInHelper.GoogleAuthUser;
 import in.voiceme.app.voiceme.SocialSignInHelper.GooglePlusSignInHelper;
 import in.voiceme.app.voiceme.SocialSignInHelper.GoogleResponseListener;
-import in.voiceme.app.voiceme.SocialSignInHelper.GoogleSignInHelper;
 import in.voiceme.app.voiceme.infrastructure.BaseActivity;
 import in.voiceme.app.voiceme.infrastructure.PrefUtil;
 
@@ -32,11 +32,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private static final int RC_SIGN_IN = 9001;
 
-
-
+    GoogleSignInResult result = null;
     private FacebookHelper mFbHelper;
     private GooglePlusSignInHelper mGHelper;
-    private GoogleSignInHelper mGAuthHelper;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -51,16 +49,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         //Google api initialization
         mGHelper = new GooglePlusSignInHelper(this, this);
 
-        //google auth initialization
-        mGAuthHelper = new GoogleSignInHelper(this, null, this);
-
         //fb api initialization
         mFbHelper = new FacebookHelper(this,
                 "id,name,email,gender,birthday,picture,cover",
                 this);
 
         //set sign in button
-        findViewById(R.id.g_login_btn).setOnClickListener(this);
         findViewById(R.id.g_plus_login_btn).setOnClickListener(this);
         findViewById(R.id.bt_act_login_fb).setOnClickListener(this);
 
@@ -76,9 +70,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.g_login_btn:
-                mGAuthHelper.performSignIn(this);
-                break;
             case R.id.g_plus_login_btn:
                 mGHelper.performSignIn();
                 break;
@@ -95,7 +86,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         //handle results
         mFbHelper.onActivityResult(requestCode, resultCode, data);
         mGHelper.onActivityResult(requestCode, resultCode, data);
-        mGAuthHelper.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -290,11 +280,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onGSignInSuccess(Person person) {
         Toast.makeText(this, "Google sign in success", Toast.LENGTH_SHORT).show();
+
+        outputCognitoCredentials();
         Log.d("Person display name: ", person.getDisplayName() + "");
         Log.d("Person birth date: ", person.getBirthday() + "");
         Log.d("Person gender: ", person.getGender() + "");
         Log.d("Person name: ", person.getName() + "");
         Log.d("Person id: ", person.getImage() + "");
+        application.getAuth().setAuthToken("token");
+        application.getAuth().getUser().setLoggedIn(true);
+        finishLogin();
     }
 
     @Override

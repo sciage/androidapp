@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/androidapp.iml" filepath="$PROJECT_DIR$/androidapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/licenseLib/licenseLib.iml" filepath="$PROJECT_DIR$/licenseLib/licenseLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/materialanimatedswitch/materialanimatedswitch.iml" filepath="$PROJECT_DIR$/materialanimatedswitch/materialanimatedswitch.iml" />
     </modules>
   </component>
 </project>
