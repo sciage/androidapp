@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
 
         // Uncomment if you want to use Java 8 syntax without switching to the Jack+Jill compilers
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'

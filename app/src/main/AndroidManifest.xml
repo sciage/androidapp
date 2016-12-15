@@ -51,9 +51,6 @@
             android:name=".DiscoverPage.DiscoverActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".login.LoginNarrowActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".login.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
