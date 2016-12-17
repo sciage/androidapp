@@ -24,8 +24,6 @@ import in.voiceme.app.voiceme.SocialSignInHelper.GoogleResponseListener;
 import in.voiceme.app.voiceme.infrastructure.BaseActivity;
 import in.voiceme.app.voiceme.infrastructure.PrefUtil;
 
-import static com.facebook.AccessToken.getCurrentAccessToken;
-
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener, GoogleResponseListener, FacebookResponse, GoogleAuthResponse {
     private PrefUtil prefUtil;
@@ -98,11 +96,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         //handle permissions
         mGHelper.onPermissionResult(requestCode, grantResults);
-    }
-
-    private void finishLogin() {
-        startActivity(new Intent(this, LoginUserDetails.class));
-        finish();
     }
     /*
     @Override
@@ -260,8 +253,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onFbProfileReceived(FacebookUser facebookUser) {
         Toast.makeText(this, "Facebook user data: name= " + facebookUser.name + " email= " + facebookUser.email, Toast.LENGTH_SHORT).show();
-        addFacebookLoginToCognito(getCurrentAccessToken());
-        outputCognitoCredentials();
+
         Log.d("Person name: ", facebookUser.name + "");
         Log.d("Person gender: ", facebookUser.gender + "");
         Log.d("Person email: ", facebookUser.email + "");
@@ -269,8 +261,53 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         application.getAuth().setAuthToken("token");
         application.getAuth().getUser().setLoggedIn(true);
-        finishLogin();
+        setResult(RESULT_OK);
+        finish();
     }
+
+
+    /*
+    @Subscribe
+    public void addFacebookLoginToCognito(Account.FacebookAccessTokenCognito facebookAccessToken) {
+        Timber.i( "addFacebookLoginToCognito");
+        Timber.i( "AccessToken: " + facebookAccessToken.fbToken);
+
+        addDataToSampleDataset("facebook_token", facebookAccessToken.fbToken); // please don't do this in a production app...
+
+        Map<String, String> logins = application.getmCredentialsProvider().getLogins();
+        logins.put("graph.facebook.com", facebookAccessToken.fbToken);
+        Timber.i( "logins: " + logins.toString());
+
+        application.getmCredentialsProvider().setLogins(logins);
+    }
+
+    @Subscribe
+    public void addGoogleLoginToCognito(Account.GoogleAccessTokenCognito token) throws GoogleAuthException, IOException {
+        Timber.i("addGoogleLoginToCognito");
+        Timber.i("token: " + token.accessToken);
+
+        addDataToSampleDataset("google_token", token.accessToken); // please don't do this in a production app...
+
+        Map<String, String> logins = application.getmCredentialsProvider().getLogins();
+        logins.put("accounts.google.com", token.accessToken);
+        Timber.i( "logins: " + logins.toString());
+
+        application.getmCredentialsProvider().setLogins(logins);
+    }
+
+    private void addDataToSampleDataset(String key, String value) {
+        Dataset dataset = application.getmSyncClient().openOrCreateDataset("SampleDataset");
+        dataset.put(key, value);
+        dataset.synchronize(new DefaultSyncCallback() {
+            @Override
+            public void onSuccess(Dataset dataset, List newRecords) {
+                Timber.i( "addDataToSampleDataset onSuccess");
+                Timber.i( dataset.toString());
+
+            }
+        });
+    } */
+
 
     @Override
     public void onGSignInFail() {
@@ -281,7 +318,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onGSignInSuccess(Person person) {
         Toast.makeText(this, "Google sign in success", Toast.LENGTH_SHORT).show();
 
-        outputCognitoCredentials();
         Log.d("Person display name: ", person.getDisplayName() + "");
         Log.d("Person birth date: ", person.getBirthday() + "");
         Log.d("Person gender: ", person.getGender() + "");
@@ -289,7 +325,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         Log.d("Person id: ", person.getImage() + "");
         application.getAuth().setAuthToken("token");
         application.getAuth().getUser().setLoggedIn(true);
-        finishLogin();
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override

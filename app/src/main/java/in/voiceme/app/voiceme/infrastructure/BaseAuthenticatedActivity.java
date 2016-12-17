@@ -15,7 +15,9 @@ public abstract class BaseAuthenticatedActivity extends BaseActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
-        }
+        } else if (application.getAuth().hasAuthToken()){
+          //   refreshCredentialsProvider();
+         }
 
          /* if (!application.getAuth().getUser().isLoggedIn()) {
             if (application.getAuth().hasAuthToken()) {

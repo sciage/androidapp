@@ -56,6 +56,8 @@ public class MainActivity extends BaseAuthenticatedActivity {
 
     }
 
+
+
     //add all pages
     private void addPages(ViewPager pager) {
         MainActivityFragmentPagerAdapter adapter = new MainActivityFragmentPagerAdapter(getSupportFragmentManager());

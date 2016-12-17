@@ -25,7 +25,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import in.voiceme.app.voiceme.R;
-import in.voiceme.app.voiceme.VoicemeApplication;
+import in.voiceme.app.voiceme.infrastructure.VoicemeApplication;
+import in.voiceme.app.voiceme.infrastructure.Account;
 import in.voiceme.app.voiceme.infrastructure.BaseAuthenticatedActivity;
 import in.voiceme.app.voiceme.infrastructure.BaseSubscriber;
 import in.voiceme.app.voiceme.infrastructure.MainNavDrawer;

@@ -10,7 +10,6 @@ import com.squareup.otto.Subscribe;
 import in.voiceme.app.voiceme.R;
 import in.voiceme.app.voiceme.ActivityPage.MainActivity;
 import in.voiceme.app.voiceme.login.LoginActivity;
-import in.voiceme.app.voiceme.ProfilePage.Account;
 
 /**
  * Created by Harish on 7/26/2016.

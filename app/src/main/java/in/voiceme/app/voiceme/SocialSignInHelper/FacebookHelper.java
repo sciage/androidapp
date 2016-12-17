@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import in.voiceme.app.voiceme.infrastructure.Account;
+import in.voiceme.app.voiceme.infrastructure.VoicemeApplication;
 import in.voiceme.app.voiceme.login.RegisterActivity;
 
 /**
@@ -33,6 +35,7 @@ public class FacebookHelper {
     private String mFieldString;
     private CallbackManager mCallBackManager;
     private RegisterActivity registerActivity;
+    private VoicemeApplication application;
 
     /**
      * Public constructor.
@@ -65,7 +68,7 @@ public class FacebookHelper {
                 mListener.onFbSignInSuccess();
                 //get the user profile
                 getUserProfile(loginResult);
-
+                application.getBus().post(new Account.FacebookAccessTokenCognito(loginResult.getAccessToken().toString()));
             }
 
             @Override
@@ -178,5 +181,4 @@ public class FacebookHelper {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mCallBackManager.onActivityResult(requestCode, resultCode, data);
     }
-
 }

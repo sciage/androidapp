@@ -2,8 +2,6 @@ package in.voiceme.app.voiceme.login;
 
 import com.google.gson.annotations.SerializedName;
 
-import in.voiceme.app.voiceme.infrastructure.AbstractResponse;
-
 /*
     EXAMPLE RESPONSE:
 

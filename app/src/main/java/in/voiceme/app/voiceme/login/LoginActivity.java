@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import in.voiceme.app.voiceme.ActivityPage.MainActivity;
 import in.voiceme.app.voiceme.R;
 import in.voiceme.app.voiceme.infrastructure.BaseActivity;
-import in.voiceme.app.voiceme.ActivityPage.MainActivity;
 
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -40,7 +40,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (resultCode != RESULT_OK)
             return;
 
+        if (requestCode == REQUEST_REGISTER && resultCode == RESULT_OK ) {
+            finishLogin();
+        }
+
     }
+
+
+
+
 
     private void finishLogin() {
         startActivity(new Intent(this, MainActivity.class));

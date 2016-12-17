@@ -5,8 +5,6 @@ import android.os.Handler;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import in.voiceme.app.voiceme.VoicemeApplication;
-
 public class ActionScheduler {
     private final VoicemeApplication application;
     private final Handler handler;

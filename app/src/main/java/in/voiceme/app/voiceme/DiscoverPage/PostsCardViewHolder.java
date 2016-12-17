@@ -11,7 +11,7 @@ import com.like.OnLikeListener;
 import com.squareup.picasso.Picasso;
 
 import in.voiceme.app.voiceme.R;
-import in.voiceme.app.voiceme.VoicemeApplication;
+import in.voiceme.app.voiceme.infrastructure.VoicemeApplication;
 import in.voiceme.app.voiceme.infrastructure.BaseSubscriber;
 import in.voiceme.app.voiceme.services.LikesResponse;
 import in.voiceme.app.voiceme.services.PostsModel;

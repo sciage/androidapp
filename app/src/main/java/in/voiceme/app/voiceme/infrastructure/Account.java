@@ -1,8 +1,6 @@
-package in.voiceme.app.voiceme.ProfilePage;
+package in.voiceme.app.voiceme.infrastructure;
 
 import android.net.Uri;
-
-import in.voiceme.app.voiceme.infrastructure.ServiceResponse;
 
 /**
  * Created by Harish on 7/25/2016.
@@ -170,6 +168,22 @@ public final class Account {
 
     public static class UpdateGcmRegistrationResponse extends ServiceResponse {
 
+    }
+
+    public static class GoogleAccessTokenCognito{
+        public String accessToken;
+
+        public GoogleAccessTokenCognito(String accessToken) {
+            this.accessToken = accessToken;
+        }
+    }
+
+    public static class FacebookAccessTokenCognito{
+        public String fbToken;
+
+        public FacebookAccessTokenCognito(String fbToken) {
+            this.fbToken = fbToken;
+        }
     }
 
 

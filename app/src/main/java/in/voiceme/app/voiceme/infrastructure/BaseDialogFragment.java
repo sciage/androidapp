@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 import com.squareup.otto.Bus;
 
-import in.voiceme.app.voiceme.VoicemeApplication;
-
 /**
  * Created by Harish on 7/25/2016.
  */

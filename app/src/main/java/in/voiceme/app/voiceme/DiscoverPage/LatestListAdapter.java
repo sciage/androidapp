@@ -20,11 +20,8 @@ import in.voiceme.app.voiceme.RecyclerViewDetails.UserHugCounterActivity;
 import in.voiceme.app.voiceme.RecyclerViewDetails.UserLikeCounterActivity;
 import in.voiceme.app.voiceme.RecyclerViewDetails.UserListenCounterActivity;
 import in.voiceme.app.voiceme.RecyclerViewDetails.UserSameCounterActivity;
-import in.voiceme.app.voiceme.VoicemeApplication;
-import in.voiceme.app.voiceme.infrastructure.BaseSubscriber;
+import in.voiceme.app.voiceme.infrastructure.VoicemeApplication;
 import in.voiceme.app.voiceme.services.PostsModel;
-import in.voiceme.app.voiceme.services.WebService;
-import rx.android.schedulers.AndroidSchedulers;
 
 
 /**

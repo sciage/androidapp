@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.squareup.otto.Subscribe;
 
 import in.voiceme.app.voiceme.R;
+import in.voiceme.app.voiceme.infrastructure.Account;
 import in.voiceme.app.voiceme.infrastructure.BaseDialogFragment;
 
 /**

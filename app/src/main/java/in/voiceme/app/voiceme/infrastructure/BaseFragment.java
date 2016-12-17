@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 
 import com.squareup.otto.Bus;
 
-import in.voiceme.app.voiceme.VoicemeApplication;
-
 
 public abstract class BaseFragment extends Fragment {
     protected VoicemeApplication application;

@@ -20,6 +20,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
+import in.voiceme.app.voiceme.infrastructure.VoicemeApplication;
+
 /**
  * Created by multidots on 6/16/2016.
  */
@@ -31,8 +33,10 @@ public class GooglePlusSignInHelper implements GoogleApiClient.ConnectionCallbac
 
     private GoogleResponseListener mListener;
     private boolean isResolutionInProgress;
+
     private Activity mContext;
     private GoogleApiClient mGoogleApiClient;
+    private VoicemeApplication application;
 
     public GooglePlusSignInHelper(Activity context, GoogleResponseListener listener) {
         mContext = context;
@@ -52,7 +56,11 @@ public class GooglePlusSignInHelper implements GoogleApiClient.ConnectionCallbac
 
     public void performSignIn() {
         mGoogleApiClient.disconnect();
-        if (!mGoogleApiClient.isConnecting()) mGoogleApiClient.connect();
+        if (!mGoogleApiClient.isConnecting()) {
+            mGoogleApiClient.connect();
+
+        //    application.getBus().post(new Account.GoogleAccessTokenCognito(googleToken));
+        }
     }
 
     public void disconnectApiClient() {
@@ -124,17 +132,18 @@ public class GooglePlusSignInHelper implements GoogleApiClient.ConnectionCallbac
 
     private void handleGoogleSignInResult(GoogleSignInResult result) {
         Log.i("google Signin", "handleSignInResult: " + result.isSuccess());
-     /*   if (result.isSuccess()) {
+      if (result.isSuccess()) {
             try {
                 if (result.getSignInAccount() != null) {
-                    addGoogleLoginToCognito(result.getSignInAccount().getIdToken());
+                   // application.getBus().post(new Account.GoogleAccessTokenCognito(result.getSignInAccount().getIdToken()));
+              //      googleToken(result.getSignInAccount().getIdToken());
                 } else {
                     Log.i("error", "result.getSignInAccount is null.");
                 }
-            } catch (GoogleAuthException | IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        } */
+        }
      }
 
     public void signOut() {
