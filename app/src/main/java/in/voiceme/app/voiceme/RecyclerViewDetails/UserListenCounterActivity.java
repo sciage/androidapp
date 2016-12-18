@@ -20,7 +20,7 @@ public class UserListenCounterActivity extends BaseAuthenticatedActivity {
     @Override
     protected void onVoicemeCreate(Bundle savedState) {
         setContentView(R.layout.activity_user_listen_counter);
-        getSupportActionBar().setTitle("Listen User");
+        getSupportActionBar().setTitle("Listen LoginUser");
         toolbar.setNavigationIcon(R.mipmap.ic_ab_close);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

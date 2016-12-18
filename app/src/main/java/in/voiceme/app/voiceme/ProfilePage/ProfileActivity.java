@@ -269,7 +269,7 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
 
             if (itemId == R.id.activity_profile_edit_menuDone) {
                 // setProgressBarVisible(true);
-                /*User user = application.getAuth().getUser();
+                /*LoginUser user = application.getAuth().getUser();
                 user.setUserNickName(userName.getText().toString());
                 user.setGender(gender.getText().toString()); */
 

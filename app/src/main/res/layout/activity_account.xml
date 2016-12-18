@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/avatar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="0dp"
+        android:text="Full name"
+        android:textSize="20sp"
+        android:id="@+id/nameView"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="0dp"
+        android:text="some@mail"
+        android:textSize="20sp"
+        android:id="@+id/emailView"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="0dp"
+        android:text="11/11/2011"
+        android:textSize="20sp"
+        android:id="@+id/birthdayView"
+        android:layout_gravity="center_horizontal" />
+    <Button
+        android:layout_gravity="left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="share_btn_text"
+        android:id="@+id/shareBtn" />
+</LinearLayout>

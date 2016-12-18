@@ -19,7 +19,7 @@ public class UserHugCounterActivity extends BaseAuthenticatedActivity {
     @Override
     protected void onVoicemeCreate(Bundle savedState) {
         setContentView(R.layout.activity_user_hug_counter);
-        getSupportActionBar().setTitle("Hugs User");
+        getSupportActionBar().setTitle("Hugs LoginUser");
         toolbar.setNavigationIcon(R.mipmap.ic_ab_close);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

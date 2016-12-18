@@ -18,7 +18,7 @@ public class LoginUserDetails extends BaseAuthenticatedActivity implements View.
     @Override
     protected void onVoicemeCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login_user_details);
-        getSupportActionBar().setTitle("User Details");
+        getSupportActionBar().setTitle("LoginUser Details");
         setNavDrawer(new MainNavDrawer(this));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

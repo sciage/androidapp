@@ -19,7 +19,7 @@ public class UserLikeCounterActivity extends BaseAuthenticatedActivity {
     @Override
     protected void onVoicemeCreate(Bundle savedState) {
         setContentView(R.layout.activity_user_like_counter);
-        getSupportActionBar().setTitle("Like User");
+        getSupportActionBar().setTitle("Like LoginUser");
         toolbar.setNavigationIcon(R.mipmap.ic_ab_close);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

@@ -11,32 +11,16 @@
 
 
 
-    <Button
-        android:id="@+id/g_login_btn"
-        style="@style/GoogleSignInButton"
-        android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/fb_btn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="false"
-        android:text="GMAIL LOGIN" />
+        android:layout_gravity="center_horizontal" />
 
-    <Button
-        android:id="@+id/g_plus_login_btn"
-        style="@style/GoogleSignInButton"
-        android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_btn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="false"
-        android:text="Google PLUS LOGIN" />
-
-    <Button
-        android:id="@+id/bt_act_login_fb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/corner_fb"
-        android:text="Facebook"
-        android:textAllCaps="true"
-        android:textColor="@android:color/white" />
+        android:layout_below="@+id/fb_btn" />
 
 </LinearLayout>

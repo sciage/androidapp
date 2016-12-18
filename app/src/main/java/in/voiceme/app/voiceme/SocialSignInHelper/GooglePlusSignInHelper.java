@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -21,19 +20,21 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
 import in.voiceme.app.voiceme.infrastructure.VoicemeApplication;
+import timber.log.Timber;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by multidots on 6/16/2016.
  */
 public class GooglePlusSignInHelper implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final int SIGN_IN_REQUEST_CODE = 101;
+    public static final int SIGN_IN_REQUEST_CODE = 101;
     private static final int ERROR_DIALOG_REQUEST_CODE = 102;
     private static final int PERMISSIONS_REQUEST_GET_ACCOUNTS = 103;
 
     private GoogleResponseListener mListener;
     private boolean isResolutionInProgress;
-
     private Activity mContext;
     private GoogleApiClient mGoogleApiClient;
     private VoicemeApplication application;
@@ -56,11 +57,7 @@ public class GooglePlusSignInHelper implements GoogleApiClient.ConnectionCallbac
 
     public void performSignIn() {
         mGoogleApiClient.disconnect();
-        if (!mGoogleApiClient.isConnecting()) {
-            mGoogleApiClient.connect();
-
-        //    application.getBus().post(new Account.GoogleAccessTokenCognito(googleToken));
-        }
+        if (!mGoogleApiClient.isConnecting()) mGoogleApiClient.connect();
     }
 
     public void disconnectApiClient() {
@@ -121,30 +118,25 @@ public class GooglePlusSignInHelper implements GoogleApiClient.ConnectionCallbac
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GooglePlusSignInHelper.SIGN_IN_REQUEST_CODE) {
+        if (requestCode == GooglePlusSignInHelper.SIGN_IN_REQUEST_CODE && resultCode == RESULT_OK) {
             if (mGoogleApiClient != null && !mGoogleApiClient.isConnecting()) {
                 mGoogleApiClient.connect();
-                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-                handleGoogleSignInResult(result);
+            }
+            Timber.d("this is the intent data" + data.getDataString());
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                try {
+                    if (result.getSignInAccount() != null) {
+              //        application.getBus().post(new Account.GoogleAccessTokenCognito(result.getSignInAccount().getIdToken()));
+                    } else {
+                        Timber.i( "result.getSignInAccount is null.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
-
-    private void handleGoogleSignInResult(GoogleSignInResult result) {
-        Log.i("google Signin", "handleSignInResult: " + result.isSuccess());
-      if (result.isSuccess()) {
-            try {
-                if (result.getSignInAccount() != null) {
-                   // application.getBus().post(new Account.GoogleAccessTokenCognito(result.getSignInAccount().getIdToken()));
-              //      googleToken(result.getSignInAccount().getIdToken());
-                } else {
-                    Log.i("error", "result.getSignInAccount is null.");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-     }
 
     public void signOut() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {

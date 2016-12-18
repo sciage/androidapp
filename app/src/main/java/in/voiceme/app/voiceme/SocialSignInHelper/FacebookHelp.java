@@ -22,27 +22,21 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import in.voiceme.app.voiceme.infrastructure.BaseActivity;
 import in.voiceme.app.voiceme.login.RegisterActivity;
 
-/**
- * Created by multidots on 6/16/2016.
- * This class will initialize facebook login and handle other sdk functions.
- */
-public class FacebookHelper {
+public class FacebookHelp extends BaseActivity {
     private FacebookResponse mListener;
     private String mFieldString;
     private CallbackManager mCallBackManager;
     private RegisterActivity registerActivity;
 
-    /**
-     * Public constructor.
-     *
-     * @param responseListener {@link FacebookResponse} listener to get call back response.
-     * @param fieldString      name of the fields required. (e.g. id,name,email,gender,birthday,picture,cover)
-     *                         See {@link 'https://developers.facebook.com/docs/graph-api/reference/user'} for more info on user node.
-     * @param context          instance of the caller activity
-     */
-    public FacebookHelper(@NonNull FacebookResponse responseListener,
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    public FacebookHelp(@NonNull FacebookResponse responseListener,
                           @NonNull String fieldString,
                           @NonNull Activity context) {
         FacebookSdk.sdkInitialize(context.getApplicationContext());
@@ -65,7 +59,7 @@ public class FacebookHelper {
                 mListener.onFbSignInSuccess();
                 //get the user profile
                 getUserProfile(loginResult);
-             //   application.getBus().post(new Account.FacebookAccessTokenCognito(loginResult.getAccessToken().toString()));
+//                bus.post(new Account.FacebookAccessTokenCognito(loginResult.getAccessToken().toString()));
             }
 
             @Override

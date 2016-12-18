@@ -1,5 +1,6 @@
 package in.voiceme.app.voiceme.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,30 +10,40 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.plus.model.people.Person;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.Arrays;
+
 import in.voiceme.app.voiceme.R;
-import in.voiceme.app.voiceme.SocialSignInHelper.FacebookHelper;
-import in.voiceme.app.voiceme.SocialSignInHelper.FacebookResponse;
-import in.voiceme.app.voiceme.SocialSignInHelper.FacebookUser;
-import in.voiceme.app.voiceme.SocialSignInHelper.GoogleAuthResponse;
-import in.voiceme.app.voiceme.SocialSignInHelper.GoogleAuthUser;
-import in.voiceme.app.voiceme.SocialSignInHelper.GooglePlusSignInHelper;
-import in.voiceme.app.voiceme.SocialSignInHelper.GoogleResponseListener;
 import in.voiceme.app.voiceme.infrastructure.BaseActivity;
-import in.voiceme.app.voiceme.infrastructure.PrefUtil;
+import in.voiceme.app.voiceme.presenter.AccountActivity;
+import in.voiceme.app.voiceme.presenter.facebook.FbPresenter;
+import in.voiceme.app.voiceme.presenter.facebook.FbPresenterImpl;
+import in.voiceme.app.voiceme.presenter.gplus.GplusPresenter;
+import in.voiceme.app.voiceme.presenter.gplus.GplusPresenterImpl;
+import in.voiceme.app.voiceme.presenter.model.data.LoginUser;
+import in.voiceme.app.voiceme.presenter.view.MainView;
 
 
-public class RegisterActivity extends BaseActivity implements View.OnClickListener, GoogleResponseListener, FacebookResponse, GoogleAuthResponse {
-    private PrefUtil prefUtil;
+public class RegisterActivity extends BaseActivity implements MainView, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final int RC_SIGN_IN = 9001;
-
-    GoogleSignInResult result = null;
-    private FacebookHelper mFbHelper;
-    private GooglePlusSignInHelper mGHelper;
+    private CallbackManager fbManager;
+    private FbPresenter fbPresenter;
+    private GplusPresenter gplusPresenter;
+    private LoginButton fBtn;
+    private SignInButton gBtn;
+    Context c = this;
+    private GoogleApiClient account;
+    private static final int GOOGLE_SIGNIN_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -44,17 +55,30 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         Toast.makeText(RegisterActivity.this, token, Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_register);
 
-        //Google api initialization
-        mGHelper = new GooglePlusSignInHelper(this, this);
+        fbManager = CallbackManager.Factory.create();
+        fBtn = (LoginButton) findViewById(R.id.fb_btn);
+        fBtn.setReadPermissions(Arrays.asList("public_profile","email","user_birthday"));
 
-        //fb api initialization
-        mFbHelper = new FacebookHelper(this,
-                "id,name,email,gender,birthday,picture,cover",
-                this);
+        fbPresenter = new FbPresenterImpl(this);
+        fbLogin();
 
-        //set sign in button
-        findViewById(R.id.g_plus_login_btn).setOnClickListener(this);
-        findViewById(R.id.bt_act_login_fb).setOnClickListener(this);
+        gplusPresenter = new GplusPresenterImpl(this);
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        final GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, options)
+                .build();
+
+        gBtn = (SignInButton) findViewById(R.id.google_btn);
+        gBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gplusPresenter.allowLogin(googleApiClient);
+            }
+        });
 
 
         // initFacebookLogin();
@@ -65,37 +89,40 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.g_plus_login_btn:
-                mGHelper.performSignIn();
-                break;
-            case R.id.bt_act_login_fb:
-                mFbHelper.performSignIn(this);
-
-                break;
-        }
+    private void fbLogin(){
+        fBtn.registerCallback(fbManager, (FacebookCallback<LoginResult>) fbPresenter);
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //handle results
-        mFbHelper.onActivityResult(requestCode, resultCode, data);
-        mGHelper.onActivityResult(requestCode, resultCode, data);
+        fbManager.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GOOGLE_SIGNIN_REQUEST){
+            gplusPresenter.onResult(Auth.GoogleSignInApi.getSignInResultFromIntent(data));
+        }
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mGHelper.disconnectApiClient();
+    public void setUser(LoginUser user) {
+        if (user != null){
+            sendIntent(user);
+        } else {
+            Log.d("GPLUS", "GPLUS ERROR");
+        }
+    }
+
+    private void sendIntent(LoginUser user){
+        Intent i = new Intent(this, AccountActivity.class);
+        i.putExtra("user", user);
+        startActivity(i);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        //handle permissions
-        mGHelper.onPermissionResult(requestCode, grantResults);
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("GPLUS", "GPLUS ERROR");
     }
     /*
     @Override
@@ -225,6 +252,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -240,6 +269,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     @Override
     public void onFbSignInFail() {
         Toast.makeText(this, "Facebook sign in failed.", Toast.LENGTH_SHORT).show();
@@ -249,6 +279,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onFbSignInSuccess() {
         Toast.makeText(this, "Facebook sign in success", Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void onFbProfileReceived(FacebookUser facebookUser) {
@@ -266,7 +297,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-    /*
+
     @Subscribe
     public void addFacebookLoginToCognito(Account.FacebookAccessTokenCognito facebookAccessToken) {
         Timber.i( "addFacebookLoginToCognito");
@@ -306,7 +337,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             }
         });
-    } */
+    }
 
 
     @Override
@@ -332,13 +363,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onGoogleAuthSignIn(GoogleAuthUser user) {
         Toast.makeText(this, "Google user data: name= " + user.name + " email= " + user.email, Toast.LENGTH_SHORT).show();
+        application.getAuth().setAuthToken("token");
+        application.getAuth().getUser().setLoggedIn(true);
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override
     public void onGoogleAuthSignInFailed() {
         Toast.makeText(this, "Google sign in failed.", Toast.LENGTH_SHORT).show();
-    }
-
-
+    }*/
 
 }

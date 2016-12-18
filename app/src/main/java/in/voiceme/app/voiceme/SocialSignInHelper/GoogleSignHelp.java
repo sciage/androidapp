@@ -2,6 +2,7 @@ package in.voiceme.app.voiceme.SocialSignInHelper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,36 +15,34 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-/**
- * Created by multidots on 6/21/2016.
- * This is the helper class for Google sign in using Google Auth.
- * You can find detail steps here: {@link 'https://developers.google.com/identity/sign-in/android/start-integrating#add-config'}
- */
-public class GoogleSignInHelper implements GoogleApiClient.OnConnectionFailedListener {
+import in.voiceme.app.voiceme.infrastructure.Account;
+import in.voiceme.app.voiceme.infrastructure.BaseActivity;
+
+public class GoogleSignHelp extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 100;
     private FragmentActivity mContext;
     private GoogleAuthResponse mListener;
     private GoogleApiClient mGoogleApiClient;
 
-    /**
-     * Public constructor
-     *
-     * @param context        instance of caller activity
-     * @param serverClientId The client ID of the server that will verify the integrity of the token. If you don't have clientId pass null.
-     *                       For more detail visit {@link 'https://developers.google.com/identity/sign-in/android/backend-auth'}
-     */
-    public GoogleSignInHelper(FragmentActivity context, @Nullable String serverClientId, @NonNull GoogleAuthResponse listener) {
-        mContext = context;
-        mListener = listener;
 
-        //noinspection ConstantConditions
-        if (listener == null){
-            throw new RuntimeException("GoogleAuthResponse listener cannot be null.");
-        }
-
-        //build api client
-        buildGoogleApiClient(buildSignInOptions(serverClientId));
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
+
+
+public GoogleSignHelp(FragmentActivity context, @Nullable String serverClientId, @NonNull GoogleAuthResponse listener) {
+    mContext = context;
+    mListener = listener;
+
+    //noinspection ConstantConditions
+    if (listener == null){
+        throw new RuntimeException("GoogleAuthResponse listener cannot be null.");
+    }
+
+    //build api client
+    buildGoogleApiClient(buildSignInOptions(serverClientId));
+}
 
     private GoogleSignInOptions buildSignInOptions(@Nullable String serverClientId) {
         GoogleSignInOptions.Builder gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -78,7 +77,7 @@ public class GoogleSignInHelper implements GoogleApiClient.OnConnectionFailedLis
             if (result.isSuccess()) {
                 // Signed in successfully, show authenticated UI.
                 GoogleSignInAccount acct = result.getSignInAccount();
-        //        application.getBus().post(new Account.GoogleAccessTokenCognito(result.getSignInAccount().getIdToken()));
+                bus.post(new Account.GoogleAccessTokenCognito(result.getSignInAccount().getIdToken()));
                 mListener.onGoogleAuthSignIn(parseToGoogleUser(acct));
             } else {
                 mListener.onGoogleAuthSignInFailed();
@@ -100,4 +99,5 @@ public class GoogleSignInHelper implements GoogleApiClient.OnConnectionFailedLis
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mListener.onGoogleAuthSignInFailed();
     }
-}
+
+    }

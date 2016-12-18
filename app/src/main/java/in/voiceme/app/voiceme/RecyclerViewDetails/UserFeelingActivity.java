@@ -12,7 +12,7 @@ public class UserFeelingActivity extends BaseAuthenticatedActivity {
     @Override
     protected void onVoicemeCreate(Bundle savedState) {
         setContentView(R.layout.activity_user_feeling);
-        getSupportActionBar().setTitle("User Feelings");
+        getSupportActionBar().setTitle("LoginUser Feelings");
         toolbar.setNavigationIcon(R.mipmap.ic_ab_close);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

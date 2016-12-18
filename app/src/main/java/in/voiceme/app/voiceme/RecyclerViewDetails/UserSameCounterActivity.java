@@ -19,7 +19,7 @@ public class UserSameCounterActivity extends BaseAuthenticatedActivity {
     @Override
     protected void onVoicemeCreate(Bundle savedState) {
         setContentView(R.layout.activity_user_same_counter);
-        getSupportActionBar().setTitle("Same User");
+        getSupportActionBar().setTitle("Same LoginUser");
         toolbar.setNavigationIcon(R.mipmap.ic_ab_close);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

@@ -110,6 +110,9 @@
             android:name=".login.LoginUserDetails"
             android:label="@string/title_activity_login_user_details"
             android:theme="@style/AppTheme" />
+        <activity android:name=".SocialSignInHelper.FacebookHelp" />
+        <activity android:name=".SocialSignInHelper.GoogleSignHelp" />
+        <activity android:name=".presenter.AccountActivity"></activity>
     </application>
 
 </manifest>
