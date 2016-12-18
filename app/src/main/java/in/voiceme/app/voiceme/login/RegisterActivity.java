@@ -24,6 +24,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.Arrays;
 
 import in.voiceme.app.voiceme.R;
+import in.voiceme.app.voiceme.infrastructure.Account;
 import in.voiceme.app.voiceme.infrastructure.BaseActivity;
 import in.voiceme.app.voiceme.presenter.AccountActivity;
 import in.voiceme.app.voiceme.presenter.facebook.FbPresenter;
@@ -32,6 +33,7 @@ import in.voiceme.app.voiceme.presenter.gplus.GplusPresenter;
 import in.voiceme.app.voiceme.presenter.gplus.GplusPresenterImpl;
 import in.voiceme.app.voiceme.presenter.model.data.LoginUser;
 import in.voiceme.app.voiceme.presenter.view.MainView;
+import timber.log.Timber;
 
 
 public class RegisterActivity extends BaseActivity implements MainView, GoogleApiClient.OnConnectionFailedListener {
@@ -42,7 +44,6 @@ public class RegisterActivity extends BaseActivity implements MainView, GoogleAp
     private LoginButton fBtn;
     private SignInButton gBtn;
     Context c = this;
-    private GoogleApiClient account;
     private static final int GOOGLE_SIGNIN_REQUEST = 1;
 
     @Override
@@ -59,7 +60,7 @@ public class RegisterActivity extends BaseActivity implements MainView, GoogleAp
         fBtn = (LoginButton) findViewById(R.id.fb_btn);
         fBtn.setReadPermissions(Arrays.asList("public_profile","email","user_birthday"));
 
-        fbPresenter = new FbPresenterImpl(this);
+        fbPresenter = new FbPresenterImpl(this, application);
         fbLogin();
 
         gplusPresenter = new GplusPresenterImpl(this);
@@ -102,6 +103,18 @@ public class RegisterActivity extends BaseActivity implements MainView, GoogleAp
 
         if (requestCode == GOOGLE_SIGNIN_REQUEST){
             gplusPresenter.onResult(Auth.GoogleSignInApi.getSignInResultFromIntent(data));
+            if (Auth.GoogleSignInApi.getSignInResultFromIntent(data).isSuccess()) {
+                try {
+                    if (Auth.GoogleSignInApi.getSignInResultFromIntent(data).getSignInAccount() != null) {
+                        bus.post(new Account.GoogleAccessTokenCognito(Auth.GoogleSignInApi.getSignInResultFromIntent(data).getSignInAccount().getIdToken()));
+                    } else {
+                        Timber.i("result.getSignInAccount is null.");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
     }
 
@@ -117,6 +130,8 @@ public class RegisterActivity extends BaseActivity implements MainView, GoogleAp
     private void sendIntent(LoginUser user){
         Intent i = new Intent(this, AccountActivity.class);
         i.putExtra("user", user);
+        application.getAuth().setAuthToken("token");
+        application.getAuth().getUser().setLoggedIn(true);
         startActivity(i);
     }
 
@@ -124,17 +139,6 @@ public class RegisterActivity extends BaseActivity implements MainView, GoogleAp
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d("GPLUS", "GPLUS ERROR");
     }
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-          //  handleGoogleSignInResult(result);
-        } else {
-            mFacebookCallbackManager.onActivityResult(requestCode, resultCode, data);
-        }
-    } */
 
     // -- AWS Cognito Related Methods
 
@@ -190,56 +194,6 @@ public class RegisterActivity extends BaseActivity implements MainView, GoogleAp
             }
         });
 
-    } */
-
-
-
-
-
-    // -- Google Sign-In Related Methods
-    /*
-    private void initGoogleLogin() {
-        if (mGoogleSignInOptions == null) {
-            mGoogleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.GOOGLE_SERVER_CLIENT_ID))
-                    .build();
-        }
-
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                        @Override
-                        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        }
-                    })
-                    .addApi(com.google.android.gms.auth.api.Auth.GOOGLE_SIGN_IN_API, mGoogleSignInOptions)
-                    .build();
-        }
-
-        gmsLogin = (SignInButton) findViewById(R.id.gmsLogin);
-
-        gmsLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-            }
-        });
-    }
-
-    private void handleGoogleSignInResult(GoogleSignInResult result) {
-        Log.i(TAG, "handleSignInResult: " + result.isSuccess());
-        if (result.isSuccess()) {
-            try {
-                if (result.getSignInAccount() != null) {
-                    addGoogleLoginToCognito(result.getSignInAccount().getIdToken());
-                } else {
-                    Log.i(TAG, "result.getSignInAccount is null.");
-                }
-            } catch (GoogleAuthException | IOException e) {
-                e.printStackTrace();
-            }
-        }
     } */
 
 
@@ -311,34 +265,6 @@ public class RegisterActivity extends BaseActivity implements MainView, GoogleAp
 
         application.getmCredentialsProvider().setLogins(logins);
     }
-
-    @Subscribe
-    public void addGoogleLoginToCognito(Account.GoogleAccessTokenCognito token) throws GoogleAuthException, IOException {
-        Timber.i("addGoogleLoginToCognito");
-        Timber.i("token: " + token.accessToken);
-
-        addDataToSampleDataset("google_token", token.accessToken); // please don't do this in a production app...
-
-        Map<String, String> logins = application.getmCredentialsProvider().getLogins();
-        logins.put("accounts.google.com", token.accessToken);
-        Timber.i( "logins: " + logins.toString());
-
-        application.getmCredentialsProvider().setLogins(logins);
-    }
-
-    private void addDataToSampleDataset(String key, String value) {
-        Dataset dataset = application.getmSyncClient().openOrCreateDataset("SampleDataset");
-        dataset.put(key, value);
-        dataset.synchronize(new DefaultSyncCallback() {
-            @Override
-            public void onSuccess(Dataset dataset, List newRecords) {
-                Timber.i( "addDataToSampleDataset onSuccess");
-                Timber.i( dataset.toString());
-
-            }
-        });
-    }
-
 
     @Override
     public void onGSignInFail() {

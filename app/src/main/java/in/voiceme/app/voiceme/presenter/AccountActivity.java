@@ -2,7 +2,6 @@ package in.voiceme.app.voiceme.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,16 +10,21 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import in.voiceme.app.voiceme.R;
+import in.voiceme.app.voiceme.infrastructure.BaseAuthenticatedActivity;
+import in.voiceme.app.voiceme.infrastructure.MainNavDrawer;
 import in.voiceme.app.voiceme.presenter.model.data.LoginUser;
 import in.voiceme.app.voiceme.presenter.view.AccountView;
 
-public class AccountActivity extends AppCompatActivity implements AccountView {
+public class AccountActivity extends BaseAuthenticatedActivity implements AccountView {
     private Button shareBtn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onVoicemeCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_account);
+        setNavDrawer(new MainNavDrawer(this));
+
+//        bus.post(new Account.FacebookAccessTokenCognito(AccessToken.getCurrentAccessToken().toString()));
+
 
         TextView nameView = (TextView) findViewById(R.id.nameView);
         TextView emailView = (TextView) findViewById(R.id.emailView);
@@ -28,6 +32,7 @@ public class AccountActivity extends AppCompatActivity implements AccountView {
         ImageView avatar = (ImageView) findViewById(R.id.avatar);
 
         shareBtn = (Button) findViewById(R.id.shareBtn);
+
 
         shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -36,7 +36,7 @@ public class GplusPresenterImpl implements GplusPresenter {
             user.setEmail(account.getEmail() == null ? "" : account.getEmail());
             user.setFullName(account.getDisplayName());
             user.setPicUrl(account.getPhotoUrl() == null ? "" : account.getPhotoUrl().toString());
-            
+
 
             Log.d("GPLUS", String.format("%1$S %2$S %3$S", user.getEmail(), user.getFullName(), user.getPicUrl()));
 

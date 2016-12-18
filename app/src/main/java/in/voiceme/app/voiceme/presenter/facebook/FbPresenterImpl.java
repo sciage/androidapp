@@ -22,6 +22,8 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 import in.voiceme.app.voiceme.R;
+import in.voiceme.app.voiceme.infrastructure.Account;
+import in.voiceme.app.voiceme.infrastructure.VoicemeApplication;
 import in.voiceme.app.voiceme.presenter.model.FacebookRequester;
 import in.voiceme.app.voiceme.presenter.model.FacebookRequesterImpl;
 import in.voiceme.app.voiceme.presenter.model.data.LoginUser;
@@ -32,6 +34,7 @@ public class FbPresenterImpl implements FbPresenter, FacebookCallback<LoginResul
     private MainView view;
     private Context c;
     FacebookRequester requester;
+    private VoicemeApplication application;
 
     GraphRequest.GraphJSONObjectCallback callback = new GraphRequest.GraphJSONObjectCallback() {
         @Override
@@ -51,11 +54,13 @@ public class FbPresenterImpl implements FbPresenter, FacebookCallback<LoginResul
             }
         }
     };
-    public FbPresenterImpl(Activity activity){
+    public FbPresenterImpl(Activity activity, VoicemeApplication application){
 
         view = (MainView) activity;
+        this.application = application;
         c = activity.getApplicationContext();
         requester = new FacebookRequesterImpl(c);
+
     }
 
     @Override
@@ -72,6 +77,7 @@ public class FbPresenterImpl implements FbPresenter, FacebookCallback<LoginResul
     @Override
     public void onSuccess(LoginResult loginResult) {
         requester.facebookRequest(loginResult, callback);
+        application.getBus().post(new Account.FacebookAccessTokenCognito(loginResult.getAccessToken().getToken()));
     }
 
     @Override

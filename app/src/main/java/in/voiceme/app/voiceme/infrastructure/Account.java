@@ -176,6 +176,10 @@ public final class Account {
         public GoogleAccessTokenCognito(String accessToken) {
             this.accessToken = accessToken;
         }
+
+        public String getToken(){
+            return accessToken;
+        }
     }
 
     public static class FacebookAccessTokenCognito{

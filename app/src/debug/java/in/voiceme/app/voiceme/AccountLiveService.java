@@ -34,15 +34,16 @@ public class AccountLiveService extends BaseLiveService {
     @Subscribe
     public void addGoogleLoginToCognito(Account.GoogleAccessTokenCognito token) throws GoogleAuthException, IOException {
         Timber.i("addGoogleLoginToCognito");
-        Timber.i("token: " + token.accessToken);
+        Timber.i("token: " + token.getToken());
 
-        addDataToSampleDataset("google_token", token.accessToken); // please don't do this in a production app...
+        addDataToSampleDataset("google_token", token.getToken()); // please don't do this in a production app...
 
         Map<String, String> logins = application.getmCredentialsProvider().getLogins();
-        logins.put("accounts.google.com", token.accessToken);
+        logins.put("accounts.google.com", token.getToken());
         Timber.i( "logins: " + logins.toString());
 
         application.getmCredentialsProvider().setLogins(logins);
+        refreshCredentialsProvider();
     }
 
     @Subscribe
@@ -57,6 +58,7 @@ public class AccountLiveService extends BaseLiveService {
         Timber.i( "logins: " + logins.toString());
 
         application.getmCredentialsProvider().setLogins(logins);
+        refreshCredentialsProvider();
     }
 
     private void addDataToSampleDataset(String key, String value) {
