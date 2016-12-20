@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import in.voiceme.app.voiceme.login.LoginActivity;
+import in.voiceme.app.voiceme.login.account.AccountManager;
 
 public abstract class BaseAuthenticatedActivity extends BaseActivity {
 
@@ -11,15 +12,7 @@ public abstract class BaseAuthenticatedActivity extends BaseActivity {
     protected final void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
-         if (!application.getAuth().hasAuthToken()) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        } else if (application.getAuth().hasAuthToken()){
-          //   refreshCredentialsProvider();
-         }
-
-         /* if (!application.getAuth().getUser().isLoggedIn()) {
+        if (!application.getAuth().getUser().isLoggedIn()) {
             if (application.getAuth().hasAuthToken()) {
                 Intent intent = new Intent(this, AuthenticationActivity.class);
                 intent.putExtra(AuthenticationActivity.EXTRA_RETURN_TO_ACTIVITY, getClass().getName());
@@ -30,7 +23,7 @@ public abstract class BaseAuthenticatedActivity extends BaseActivity {
 
             finish();
             return;
-        } */
+        }
 
         onVoicemeCreate(savedState);
     }

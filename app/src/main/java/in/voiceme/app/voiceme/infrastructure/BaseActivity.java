@@ -11,6 +11,7 @@ import com.squareup.otto.Bus;
 
 import in.voiceme.app.voiceme.ActivityPage.MainActivity;
 import in.voiceme.app.voiceme.R;
+import in.voiceme.app.voiceme.login.account.AccountManager;
 
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -21,6 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected ActionScheduler scheduler;
     private boolean isRegisterdWithBus;
     private static String TAG = MainActivity.class.getSimpleName();
+    protected AccountManager manager;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -28,6 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         application = (VoicemeApplication) getApplication();
         bus = application.getBus();
         scheduler = new ActionScheduler(application);
+        manager = AccountManager.getInstance();
 
         bus.register(this);
         isRegisterdWithBus = true;

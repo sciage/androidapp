@@ -190,12 +190,12 @@ public class RegisterActivity extends BaseActivity implements GoogleApiClient.On
             GoogleSignInAccount acct = result.getSignInAccount();
             Map<String, String> logins = new HashMap<>();
             logins.put(GOOGLE_LOGIN, acct.getIdToken());
-            application.getAuth().setAuthToken("token");
-            application.getAuth().getUser().setLoggedIn(true);
+
             Log.v(TAG, String.format("Google token <<<\n%s\n>>>", logins.get(GOOGLE_LOGIN)));
 
             // The identity must be created asynchronously
             new CreateIdentityTask(this).execute(logins);
+            application.getAuth().getUser().setLoggedIn(true);
             setResult(RESULT_OK);
             finish();
 
@@ -228,13 +228,12 @@ public class RegisterActivity extends BaseActivity implements GoogleApiClient.On
 
         final Map<String, String> logins = new HashMap<>();
         logins.put(FACEBOOK_LOGIN, AccessToken.getCurrentAccessToken().getToken());
-        application.getAuth().setAuthToken("token");
-        application.getAuth().getUser().setLoggedIn(true);
         Log.v(TAG, String.format("Facebook token <<<\n%s\n>>>", logins.get(FACEBOOK_LOGIN)));
 
 
         // The identity must be created asynchronously
         new CreateIdentityTask(this).execute(logins);
+        application.getAuth().getUser().setLoggedIn(true);
         setResult(RESULT_OK);
         finish();
     }
