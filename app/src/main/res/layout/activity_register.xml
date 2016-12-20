@@ -11,16 +11,42 @@
 
 
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/fb_btn"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="google_login_not_available"
+        android:id="@+id/signin_no_google_signin_txt"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"/>
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_btn"
+        android:id="@+id/signin_with_google_btn"
+        android:layout_width="240dp"
+        android:layout_height="48dp"
+        android:visibility="visible"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fb_btn" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="facebook_signin_not_available"
+        android:id="@+id/signin_no_facebook_signin_txt"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"/>
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/signin_with_facebook_btn"
+        android:layout_width="240dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"/>
 
 </LinearLayout>
