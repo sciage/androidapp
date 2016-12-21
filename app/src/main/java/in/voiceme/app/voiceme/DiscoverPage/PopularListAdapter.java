@@ -1,6 +1,7 @@
 package in.voiceme.app.voiceme.DiscoverPage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,10 @@ import com.like.OnLikeListener;
 import java.text.NumberFormat;
 import java.util.List;
 
+import in.voiceme.app.voiceme.RecyclerViewDetails.UserHugCounterActivity;
+import in.voiceme.app.voiceme.RecyclerViewDetails.UserLikeCounterActivity;
+import in.voiceme.app.voiceme.RecyclerViewDetails.UserListenCounterActivity;
+import in.voiceme.app.voiceme.RecyclerViewDetails.UserSameCounterActivity;
 import in.voiceme.app.voiceme.infrastructure.VoicemeApplication;
 import in.voiceme.app.voiceme.services.PostsModel;
 
@@ -189,15 +194,38 @@ public class PopularListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         @Override
+        protected void listenCounterClicked(View v) {
+            Intent intent = new Intent(v.getContext(), UserListenCounterActivity.class);
+            v.getContext().startActivity(intent);
+        }
+
+        @Override
+        protected void likeCounterClicked(View v) {
+            Intent intent = new Intent(v.getContext(), UserLikeCounterActivity.class);
+            v.getContext().startActivity(intent);
+        }
+
+        @Override
+        protected void hugCounterClicked(View v) {
+            Intent intent = new Intent(v.getContext(), UserHugCounterActivity.class);
+            v.getContext().startActivity(intent);
+        }
+
+        @Override
+        protected void sameCounterClicked(View v) {
+            Intent intent = new Intent(v.getContext(), UserSameCounterActivity.class);
+            v.getContext().startActivity(intent);
+        }
+
+        @Override
         public void liked(LikeButton likeButton) {
+
             int likeCounter = 0;
             int hugCounter = 0;
             int sameCounter = 0;
             try {
                 if (myClickListener != null) {
                     myClickListener.onLikeUnlikeClick(dataItem, likeButton);
-
-
                 } else {
                     Toast.makeText(likeButton.getContext(), "Click Event Null", Toast.LENGTH_SHORT).show();
                 }
@@ -218,7 +246,6 @@ public class PopularListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 same_counter.setText(NumberFormat.getIntegerInstance().format(sameCounter));
                 sendLikeToServer((VoicemeApplication) itemView.getContext().getApplicationContext(), 0, 0, 1, 0, "clicked same button");
             }
-
         }
 
         @Override
@@ -241,7 +268,6 @@ public class PopularListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 sendUnlikeToServer((VoicemeApplication) itemView.getContext().getApplicationContext(), 0, 0, 1, 0, "clicked unsame button");
             }
         }
-
 
     }
 

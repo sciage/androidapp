@@ -41,10 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
          FacebookSdk.sdkInitialize(getApplicationContext());   */
 
         /**
-         * Initializes the sync client. This must be call before you can use it.
-
-         AmazonCognitoService.init(this); */
-
+         * Initializes the sync client. This must be call before you can use it. */
     }
 
 

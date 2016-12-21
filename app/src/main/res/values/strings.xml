@@ -6,7 +6,6 @@
     <string name="google_server_client_id">390792711591-ev89q872ke80dugc4keq7keiki4s8f25.apps.googleusercontent.com</string>
 
 
-
     <string name="session_expiration">Session expiration</string>
     <string name="values">Values</string>
     <string name="when">When</string>
@@ -15,17 +14,6 @@
     <string name="put_values">Put values</string>
     <string name="refresh_values">Refresh values</string>
     <string name="unset">#UNSET</string>
-
-
-
-
-
-
-
-
-
-
-
 
 
     <string name="action_settings">Settings</string>
